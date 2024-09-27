@@ -18,6 +18,7 @@
 
         .game-container {
             margin-top: 20px;
+            display: none; /* Versteckt das Spiel, bis der Link angeklickt wird */
         }
 
         iframe {
@@ -34,6 +35,7 @@
             text-decoration: none;
             color: #008cba;
             font-size: 20px;
+            cursor: pointer;
         }
 
         a:hover {
@@ -58,21 +60,42 @@
 </head>
 <body>
     <h1>Willkommen zu meinem Spiel GETA</h1>
-    <p>Viel Spaß beim Spielen! Das folgende Spiel ist direkt eingebettet:</p>
+    <p>Viel Spaß beim Spielen! Das folgende Spiel ist hier kostenlos verfügbar:</p>
 
-    <div class="game-container">
-        <iframe id="gameFrame" src="https://zap.struckd.com/games/geta-47"></iframe>
+    <!-- Container für das eingebettete Spiel -->
+    <div class="game-container" id="gameContainer">
+        <iframe id="gameFrame" src=""></iframe> <!-- Das Spiel wird erst nach Klick geladen -->
     </div>
 
-    
+    <!-- Link zu den weiteren Informationen -->
+    <div class="link-container">
+        <a id="infoLink" href="https://yip.su/25KVS4" target="_blank">PLAY GETA</a>
+    </div>
 
+    <!-- Buttons für IP-Adress Funktionen -->
     <button onclick="saveIpAddress()">Play</button>
     <button onclick="showSavedIPs()">IP-Adressen anzeigen</button>
     <p id="status"></p>
 
     <script>
+        let gameReady = false;
+
+        // Funktion, die auf den Klick des "Info"-Links reagiert
+        document.getElementById('infoLink').addEventListener('click', function(event) {
+            event.preventDefault(); // Verhindert, dass der Link sofort öffnet
+            gameReady = true; // Setzt den Status auf "Spiel kann gestartet werden"
+            window.open('https://yip.su/25KVS4', '_blank'); // Öffnet den Link in einem neuen Tab
+            document.getElementById('gameContainer').style.display = 'block'; // Zeigt das Spiel an
+            document.getElementById('gameFrame').src = "https://zap.struckd.com/games/geta-47"; // Lädt das Spiel
+        });
+
         // Funktion zum Abrufen und Speichern der IP-Adresse in LocalStorage
         function saveIpAddress() {
+            if (!gameReady) {
+                alert('Bitte klicken Sie zuerst auf den Link "Weitere Informationen zu diesem Spiel", um das Spiel zu laden.');
+                return;
+            }
+
             // IP-Adresse abrufen
             fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
@@ -103,11 +126,6 @@
                 document.getElementById('status').textContent = 'Keine IP-Adressen gespeichert.';
             }
         }
-
-        // IP-Adresse speichern, wenn das Spiel (iframe) geladen wird
-        document.getElementById('gameFrame').addEventListener('load', function() {
-            saveIpAddress(); // IP-Adresse speichern, wenn das iframe geladen wird
-        });
     </script>
 </body>
 </html>
