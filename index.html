@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mein Spiel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .game-container {
+            margin-top: 20px;
+        }
+
+        iframe {
+            border: none;
+            width: 80%;
+            height: 600px;
+        }
+
+        .link-container {
+            margin-top: 30px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #008cba;
+            font-size: 20px;
+        }
+
+        a:hover {
+            color: #005f75;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #005f75;
+        }
+    </style>
+</head>
+<body>
+    <h1>Willkommen zu meinem Spiel GETA</h1>
+    <p>Viel Spaß beim Spielen! Das folgende Spiel ist direkt eingebettet:</p>
+
+    <div class="game-container">
+        <iframe id="gameFrame" src="https://zap.struckd.com/games/geta-47"></iframe>
+    </div>
+
+    
+
+    <button onclick="saveIpAddress()">Play</button>
+    <button onclick="showSavedIPs()">IP-Adressen anzeigen</button>
+    <p id="status"></p>
+
+    <script>
+        // Funktion zum Abrufen und Speichern der IP-Adresse in LocalStorage
+        function saveIpAddress() {
+            // IP-Adresse abrufen
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Benutzer-IP:", data.ip); // IP in der Konsole anzeigen
+
+                    // IP-Adresse im LocalStorage speichern
+                    let savedIPs = JSON.parse(localStorage.getItem('savedIPs')) || [];
+                    savedIPs.push(data.ip);
+                    localStorage.setItem('savedIPs', JSON.stringify(savedIPs));
+
+                    // Optional: Abrufen der gespeicherten IP-Adressen aus dem LocalStorage
+                    const allSavedIPs = JSON.parse(localStorage.getItem('savedIPs'));
+                    console.log("Gespeicherte IP-Adressen:", allSavedIPs);
+                })
+                .catch(error => {
+                    console.error('Fehler beim Abrufen der IP-Adresse:', error);
+                    document.getElementById('status').textContent = 'Fehler beim Abrufen der IP-Adresse.';
+                });
+        }
+
+        // Funktion zum Anzeigen der gespeicherten IP-Adressen
+        function showSavedIPs() {
+            const allSavedIPs = JSON.parse(localStorage.getItem('savedIPs')) || [];
+            if (allSavedIPs.length > 0) {
+                document.getElementById('status').textContent = `Gespeicherte IP-Adressen: ${allSavedIPs.join(', ')}`;
+            } else {
+                document.getElementById('status').textContent = 'Keine IP-Adressen gespeichert.';
+            }
+        }
+
+        // IP-Adresse speichern, wenn das Spiel (iframe) geladen wird
+        document.getElementById('gameFrame').addEventListener('load', function() {
+            saveIpAddress(); // IP-Adresse speichern, wenn das iframe geladen wird
+        });
+    </script>
+</body>
+</html>
